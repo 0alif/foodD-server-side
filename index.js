@@ -22,13 +22,14 @@ async function run() {
         const productCollection = database.collection('product');
         const orderCollection = database.collection('orders');
 
-        // get api
+        // add products api
         app.get('/products', async (req, res) => {
             const cursor = productCollection.find({});
             const product = await cursor.toArray();
             res.send(product);
         })
 
+        // get product by id
         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -43,14 +44,21 @@ async function run() {
             res.json(result);
         })
 
-        // get orders
+        // get orders by email
         app.get('/orders/:email', async (req, res) => {
             const cursor = orderCollection.find({ email: req.params.email });
             const result = await cursor.toArray();
             res.send(result);
         })
 
-        // delete api
+        // get all orders
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const result = await cursor.toArray();
+            res.json(result);
+        })
+
+        // orders delete by id
         app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
